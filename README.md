@@ -1,6 +1,6 @@
-TRANSLEV
+dibayar.com
 
-TRANSLEV is a web-app that can help accounting departments track and record
+dibayar.com is a web-app that can help accounting departments track and record
 their inter-company transactions within a group of companies.
 
 When you sign up, you create a super admin account which also acts as Approver.
