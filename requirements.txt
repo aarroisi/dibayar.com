@@ -1,4 +1,5 @@
-cs50
-Flask
-Flask-Session
-requests
+cs50==5.0.4
+Flask==1.1.2
+Flask-Session==0.3.2
+gunicorn==20.0.4
+requests==2.24.0
