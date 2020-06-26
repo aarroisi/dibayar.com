@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <h3>Register as Super Admin of Your Group</h3>
+    <br>
+    <h6>Want to create user other than super admin? Ask your group's super admin.</a></h6>
+    <br>
+    <br>
+    <script>
+        function success()
+        {
+            if(document.getElementById("username").value=="" || document.getElementById("group_username").value=="" || +
+            document.getElementById("password").value=="" || document.getElementById("password2").value=="")
+            {
+                document.getElementById('button').disabled = true;
+            } else
+            {
+                document.getElementById('button').disabled = false;
+            }
+        }
+    </script>
+    <form action="/register" method="post">
+        <div class="form-group">
+            <input id="group_username" class="form-control" onkeyup="success()" name="group_username" placeholder="Group Username" type="text">
+        </div>
+        <div class="form-group">
+            <input id="username" class="form-control" onkeyup="success()" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group">
+            <input id="password" class="form-control" onkeyup="success()" name="password" placeholder="Password" type="password">
+        </div>
+        <div class="form-group">
+            <input id="password2" class="form-control" onkeyup="success()" name="password2" placeholder="Password (again)" type="password">
+        </div>
+        <button id="button" class="btn btn-primary" type="submit" disabled>Register</button>
+    </form>
+{% endblock %}

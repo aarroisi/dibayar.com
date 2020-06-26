@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Accounts
+{% endblock %}
+
+{% block main %}
+    <h3>Accounts</h3>
+    <h6>Group username: <b>{{ ids[0] }}</b></h6>
+    <h6>Logged in as: <b>{{ ids[1] }}</b></h6>
+    <h6>User type: <b>{{ ids[2] }}</b></h6>
+    <br>
+    <br>
+    <script>
+        function success()
+        {
+            var a = document.getElementById("acc_name").value=="";
+            var b = document.getElementById("com_name").value=="";
+            var c = document.getElementById("include").value=="Include in Balance?";
+            if(a || b || c)
+            {
+                document.getElementById('button').disabled = true;
+            } else
+            {
+                document.getElementById('button').disabled = false;
+            }
+            return [a,b,c,a||b||c]
+        }
+
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col- bg-dark text-white mx-auto" style="margin:0; auto; padding: 10px 10px 10px 10px;">
+                <h5>Create New Account</h5>
+                <form action="/accounts" method="post">
+                    <div class="form-group">
+                        <input id="com_name" onkeyup="success()" autocomplete="off" autofocus class="form-control" name="com_name" placeholder="Company name" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <input id="acc_name" onkeyup="success()" autocomplete="off" class="form-control" name="acc_name" placeholder="Account name" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <select id="include" name="include" class="form-control" onchange="success()">
+                            <option disabled selected>Include in Balance?</option>
+                            <option>Yes</option>
+                            <option>No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <input id="init_value" autocomplete="off" class="form-control" name="init_value" placeholder="Initial Value" type="number">
+                    </div>
+
+                    <div>
+                        <button id="button" class="btn btn-primary" type="submit" disabled>Add account</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <table class="table text-center table-striped">
+        <thead>
+            <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Company</th>
+                <th scope="col">Account</th>
+                <th scope="col">Include in Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+                    <tr>
+                        <td>{{ row["acc_id"] }}</td>
+                        <td>{{ row["com_name"] }}</td>
+                        <td>{{ row["acc_name"] }}</td>
+                        <td>{% if row["include"] == 1 %}Yes{% else %}No{% endif %}</td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+{% endblock %}

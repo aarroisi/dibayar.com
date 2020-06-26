@@ -1,0 +1,257 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Approve Transactions
+{% endblock %}
+
+{% block main %}
+    <script>
+        function success()
+        {
+            var a = document.getElementById("trx_id").value=="Transaction ID";
+            var c = document.getElementById("debit").value=="Imposition: Company - Account";
+            var e = document.getElementById("credit").value=="Source: Company - Account";
+            var check = a || c || e;
+
+            if(check)
+            {
+                document.getElementById('button').disabled = true;
+            } else
+            {
+                document.getElementById('button').disabled = false;
+            }
+        }
+
+        function success2()
+        {
+            var a = document.getElementById("csh_id").value=="Cash In ID";
+            if(a)
+            {
+                document.getElementById('button2').disabled = true;
+                document.getElementById('button4').disabled = true;
+            } else
+            {
+                document.getElementById('button2').disabled = false;
+                document.getElementById('button4').disabled = false;
+            }
+        }
+
+        function success3()
+        {
+            var a = document.getElementById("trx_id").value=="Transaction ID";
+            if(a)
+            {
+                document.getElementById('button3').disabled = true;
+            } else
+            {
+                document.getElementById('button3').disabled = false;
+            }
+        }
+    </script>
+    <h3>Approve Cash In and Transactions</h3>
+    <h6>Group username: <b>{{ ids[0] }}</b></h6>
+    <h6>Logged in as: <b>{{ ids[1] }}</b></h6>
+    <h6>User type: <b>{{ ids[2] }}</b></h6>
+    <br>
+    <br>
+    <h6>List of Cash In Requests</h6>
+    <table class="table text-center table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Transaction ID</th>
+                <th scope="col">Maker</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Detailed Information</th>
+                <th scope="col">Company</th>
+                <th scope="col">Account</th>
+                <th scope="col">Balance After (if Accepted)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in cashin %}
+                    <tr>
+                        <td>CSH-{{ row["cash_id"] }}</td>
+                        <td>{{ row["maker"] }}</td>
+                        <td>{{ "{:,.0f}".format(row["value"]) }}</td>
+                        <td><b>{{ row["notes"] }}</b></td>
+                        <td>{{ row["debit_com"] }}</td>
+                        <td>{{ row["debit_acc"] }}</td>
+                        <td>{{ "{:,.0f}".format(row["balance_after"]) }}</td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col- bg-dark text-white mx-auto" style="margin:0; auto; padding: 10px 10px 10px 10px;">
+                <h5>Approve Cash In by CSH ID</h5>
+                <form action="/approve" method="post">
+                    <div class="form-group">
+                        <select id="csh_id" name="csh_id" class="form-control" onchange="success2()">
+                            <option disabled selected>Cash In ID</option>
+                            {% for row in cashin %}
+                                <option>CSH-{{ row["cash_id"] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea autocomplete="off" onkeyup="success2()" class="form-control" name="add_notes" placeholder="Additional notes from Approver" rows="3" id="add_notes"></textarea>
+                    </div>
+                    <div>
+                        <button id="button2" name="button" class="btn btn-primary" type="submit" value="accept" disabled>Approve</button>
+                        <button id="button4" name="button" class="btn btn-danger" type="submit" value="reject" disabled>Reject</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <br>
+    <br>
+    <h6>List of Transaction Requests</h6>
+    <table class="table text-center table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Transaction ID</th>
+                <th scope="col">Maker</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Detailed Information</th>
+                <th scope="col">Requested Payment Method</th>
+                <th scope="col">Destination Entity</th>
+                <th scope="col">Destination Account</th>
+                <th scope="col">Destination Account Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in trx %}
+                    <tr>
+                        <td>TRX-{{ row["trx_id"] }}</td>
+                        <td>{{ row["maker"] }}</td>
+                        <td>{{ "{:,.0f}".format(row["value"]) }}</td>
+                        <td><b>{{ row["notes"] }}</b></td>
+                        <td>{{ row["req_method"] }}</td>
+                        <td>{{ row["dest_entity"] }}</td>
+                        <td>{{ row["dest_account"] }}</td>
+                        <td>{{ row["dest_account_no"] }}</td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col- bg-dark text-white mx-auto" style="margin:0; auto; padding: 10px 10px 10px 10px;">
+                <h5>Approve Transaction by TRX ID</h5>
+                <form action="/approve" method="post">
+                    <div class="form-group">
+                        <select id="trx_id" name="trx_id" class="form-control" onchange="success(); success3();">
+                            <option disabled selected>Transaction ID</option>
+                            {% for row in trx %}
+                                <option>TRX-{{ row["trx_id"] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="credit" name="credit" class="form-control" onchange="success()">
+                            <option disabled selected>Source: Company - Account</option>
+                            {% for row in accounts %}
+                                <option>{{ row["acc_com"] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <select id="debit" name="debit" class="form-control" onchange="success()">
+                            <option disabled selected>Imposition: Company - Account</option>
+                            {% for row in accounts %}
+                                <option>{{ row["acc_com"] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <textarea autocomplete="off" onkeyup="success2()" class="form-control" name="add_notes" placeholder="Additional notes from Approver" rows="3" id="add_notes"></textarea>
+                    </div>
+                    <div>
+                        <button id="button" name="button" class="btn btn-primary" type="submit" value="accept" disabled>Approve</button>
+                        <button id="button3" name="button" class="btn btn-danger" type="submit" value="reject" disabled>Reject</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <h6>List of Approved Cash In</h6>
+    <table class="table text-center table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Cash In ID</th>
+                <th scope="col">Timestamp</th>
+                <th scope="col">Company</th>
+                <th scope="col">Account</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Detailed Information</th>
+                <th scope="col">Maker</th>
+                <th scope="col">Approver</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in cashin2 %}
+                    <tr>
+                        <td>CSH-{{ row["cash_id"] }}</td>
+                        <td>{{ row["approved_date"] }}</td>
+                        <td>{{ row["debit_com"] }}</td>
+                        <td>{{ row["debit_acc"] }}</td>
+                        <td>{{ "{:,.0f}".format(row["value"]) }}</td>
+                        <td><b>{{ row["notes"] }}</b></td>
+                        <td>{{ row["maker"] }}</td>
+                        <td>{{ row["approver"] }}</td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <br>
+    <h6>List of Approved Transactions</h6>
+    <table class="table text-center table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Transaction ID</th>
+                <th scope="col">Timestamp</th>
+                <th scope="col">Debit Company</th>
+                <th scope="col">Debit Account</th>
+                <th scope="col">Credit Company</th>
+                <th scope="col">Credit Account</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Detailed Information</th>
+                <th scope="col">Maker</th>
+                <th scope="col">Approver</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in trx2 %}
+                    <tr>
+                        <td>TRX-{{ row["trx_id"] }}</td>
+                        <td>{{ row["approved_date"] }}</td>
+                        <td>{{ row["debit_com"] }}</td>
+                        <td>{{ row["debit_acc"] }}</td>
+                        <td>{{ row["credit_com"] }}</td>
+                        <td>{{ row["credit_acc"] }}</td>
+                        <td>{{ "{:,.0f}".format(row["value"]) }}</td>
+                        <td><b>{{ row["notes"] }}</b></td>
+                        <td>{{ row["maker"] }}</td>
+                        <td>{{ row["approver"] }}</td>
+                    </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

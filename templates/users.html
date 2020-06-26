@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Users
+{% endblock %}
+
+{% block main %}
+    <h3>Users</h3>
+    <h6>Group username: <b>{{ ids[0] }}</b></h6>
+    <h6>Logged in as: <b>{{ ids[1] }}</b></h6>
+    <h6>User type: <b>{{ ids[2] }}</b></h6>
+    <br>
+    <br>
+    <script>
+        function success()
+        {
+            if(document.getElementById("username").value=="" || document.getElementById("user_type").value=="User Type")
+            {
+                document.getElementById('button').disabled = true;
+            } else
+            {
+                document.getElementById('button').disabled = false;
+            }
+        }
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col- bg-dark text-white mx-auto" style="margin:0; auto; padding: 10px 10px 10px 10px;">
+                <h5>Add New User</h5>
+                <form action="/users" method="post">
+
+                    <div class="form-group">
+                        <input id="username" onkeyup="success()" autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" name="password" placeholder="Password" type="password">
+                    </div>
+
+                    <div class="form-group">
+                        <input class="form-control" name="password2" placeholder="Password (again)" type="password">
+                    </div>
+
+                    <div class="form-group">
+                        <select id="user_type" name="user_type" class="form-control" onchange="success()">
+                            <option disabled selected>User Type</option>
+                                <option>MAKER</option>
+                                <option>APPROVER</option>
+                                <option>RELEASER</option>
+                                <option>ACCOUNTANT</option>
+                        </select>
+                    </div>
+
+                    <button id="button" class="btn btn-primary" type="submit" disabled>Add user</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <table class="table text-center table-striped">
+        <thead>
+            <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Username</th>
+                <th scope="col">User Type</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in users %}
+            <tr>
+                <td>{{ row["user_id"] }}</td>
+                <td>{{ row["username"] }}</td>
+                <td>{{ row["type"] }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

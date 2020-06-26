@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <h3>Login to TRANSLEV</h3>
+    <br>
+    <h6>Don't have an account? <a href="/register">Create New</a></h6>
+    <br>
+    <br>
+    <script>
+        function success()
+        {
+            if(document.getElementById("username").value=="" || document.getElementById("password").value=="")
+            {
+                document.getElementById('button').disabled = true;
+            } else
+            {
+                document.getElementById('button').disabled = false;
+            }
+        }
+    </script>
+    <form action="/login" method="post">
+        <div class="form-group">
+            <input id="username" onkeyup="success()" autocomplete="on" autofocus class="form-control" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group">
+            <input id="password" onkeyup="success()" class="form-control" name="password" placeholder="Password" type="password">
+        </div>
+        <button id="button" onkeyup="success()" class="btn btn-primary" type="submit" disabled>Log In</button>
+    </form>
+{% endblock %}
