@@ -1,4 +1,4 @@
-dibayar.com
+# dibayar.com
 
 dibayar.com is a web-app that can help accounting departments track and record
 their inter-company transactions within a group of companies.
@@ -14,6 +14,11 @@ There are 5 types of user logins:
    actual accounting books.
 
 All transactions can be tracked to each:
-a. Group
-b. Company
-c. Debit / Credit Accounts
+* Group
+* Company
+* Debit / Credit Accounts
+
+## Heroku Link
+
+This demo application can be visited on this url: https://dibayar-flask.herokuapp.com
+
