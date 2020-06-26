@@ -3,8 +3,6 @@ dibayar.com
 dibayar.com is a web-app that can help accounting departments track and record
 their inter-company transactions within a group of companies.
 
-When you sign up, you create a super admin account which also acts as Approver.
-
 There are 5 types of user logins:
 1. Super Admin: Can do anything. This type of user is what you get when you first
    sign up.
